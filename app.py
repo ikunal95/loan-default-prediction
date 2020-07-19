@@ -47,7 +47,7 @@ sub_grade_to_char={1:'A1',2:'A2',3:'A3',4:'A4',5:'A5',6:'B1',7:'B2',8:'B3',9:'B4
         
 
 app = flask.Flask(__name__, template_folder='templates')
-@app.route('/index')
+@app.route('/')
 def main():
     return (flask.render_template('index.html'))
 
