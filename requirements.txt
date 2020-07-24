@@ -4,3 +4,4 @@ Flask==1.1.1
 scikit_learn==0.23.1
 gunicorn==19.9.0
 xgboost==1.1.1
+imblearn==0.0
