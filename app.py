@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 #load models at top of app to load into memory only one time
-with open('models/xgb_cv_compact.pkl', 'rb') as f:
+with open('models/xgb_cv_final.pkl', 'rb') as f:
     clf_individual = pickle.load(f)
 #load models at top of app to load into memory only one time
 with open('models/gb_cv_compact_joint.pkl', 'rb') as f:
@@ -23,6 +23,9 @@ df_fico_apr = pd.read_csv('data/grade_to_apr.csv')
 df_macro_mean  = pd.read_csv('data/df_macro_mean.csv', index_col=0, dtype=np.float64)
 
 df_macro_std = pd.read_csv('data/df_macro_std.csv', index_col=0, dtype=np.float64)
+drop_columns=['emp_length','purpose','revol_bal','grade','int_rate']
+df_macro_mean=df_macro_mean.drop(columns=drop_columns)
+df_macro_std =df_macro_std.drop(columns=drop_columns)
 
 
 home_to_int = {'MORTGAGE': 4,
@@ -32,24 +35,23 @@ home_to_int = {'MORTGAGE': 4,
                'OTHER': 1,          
                'NONE':0 }
 
-purp_to_int= {'car': 0, 'credit_card': 1, 'debt_consolidation': 2,
-               'educational': 3, 'home_improvement': 4, 'house': 5, 
-               'major_purchase': 6, 'medical': 7, 'moving': 8, 'other': 9, 
-               'renewable_energy': 10, 'small_business': 11, 'vacation': 12,
-               'wedding': 13}
 sub_grade_to_char={1:'A1',2:'A2',3:'A3',4:'A4',5:'A5',6:'B1',7:'B2',8:'B3',9:'B4',10:'B5'
                    ,11:'C1',12:'C2',13:'C3',14:'C4',15:'C5',16:'D1',17:'D2',18:'D3',19:'D4',20:'D5'
                    ,21:'E1',22:'E2',23:'E3',24:'E4',25:'E5',26:'F1',27:'F2',28:'F3',29:'F4',30:'F5'
                    ,31:'G1',32:'G2',33:'G3',34:'G4',35:'G5'}
-                
-        
-        
-        
 
 app = flask.Flask(__name__, template_folder='templates')
 @app.route('/')
 def main():
     return (flask.render_template('index.html'))
+
+@app.route('/report')
+def report():
+    return (flask.render_template('report.html'))
+
+@app.route('/jointreport')
+def jointreport():
+    return (flask.render_template('jointreport.html'))
 
 
 @app.route("/Individual", methods=['GET', 'POST'])
@@ -82,18 +84,8 @@ def Individual():
         open_acc = int(flask.request.form['open_acc'])
         #verification status as 0, 1, 2
         verification_status = int(flask.request.form['verification_status'])
-        #revolving balance as float
-        revol_bal = float(flask.request.form['revol_bal'])
         #revolving utilization as float
         revol_util = float(flask.request.form['revol_util'])
-        # Number of derogatory public records
-        pub_rec = int(flask.request.form['pub_rec'])
-        #number of public recorded bankruptcies as integer
-        pub_rec_bankruptcies = int(flask.request.form['pub_rec_bankruptcies'])
-        #employment length as float
-        emp_length = float(flask.request.form['emp_length'])
-        #purpose as string
-        purpose = flask.request.form['purpose']
         #The total number of credit lines currently in the borrower's credit file
         total_acc = int(flask.request.form['total_acc'])
         #time since first credit line in months
@@ -132,28 +124,19 @@ def Individual():
         #temp['fico'] = fico
         
         temp['term']=term
-        temp['int_rate']=int_rate
-        temp['grade']=grade
         temp['sub_grade']=sub_grade
-        temp['emp_length']=emp_length
         temp['home_ownership']=home_to_int[home_ownership.upper()]
         temp['annual_inc']=np.log(annual_inc)
         temp['verification_status']=verification_status
-        temp['purpose']=purp_to_int[purpose]
         temp['dti']=dti
-        temp['pub_rec']=np.where(pub_rec>0, 1, 0)
-        temp['revol_bal']=revol_bal
         temp['revol_util']=revol_util
         temp['mort_acc'] = mort_acc
-        temp['pub_rec_bankruptcies']=np.where(pub_rec_bankruptcies>0, 1, 0)
         temp['credit_hist']=credit_hist.days
         temp['credit_line_ratio']=credit_line_ratio
         temp['balance_annual_inc']=balance_annual_inc
         temp['fico_avg_score'] = fico_avg_score
         temp['inst_amnt_ratio']=inst_amnt_ratio
-        cols_when_model_builds = clf_individual.get_booster().feature_names
-
-        temp = temp[cols_when_model_builds]
+        
         #create original output dict
         output_dict= dict()
         output_dict['Provided Annual Income'] = annual_inc
@@ -166,7 +149,6 @@ def Individual():
         
         #create deep copy 
         scale = temp.copy()
-
         for feat in df_macro_mean.columns:
             scale[feat] = (scale[feat] - df_macro_mean.loc[code,feat]) / df_macro_std.loc[code,feat]
         
@@ -181,9 +163,10 @@ def Individual():
         elif revol_util>=90:
             res = 'Amount of credit used up too high!'
         elif pred ==1:
-            res = 'Congratulations! Approved!'
-        else:
             res = 'Loan Denied'
+        else:
+            print(scale)
+            res = 'Congratulations! Approved!'
  
         
         
@@ -201,7 +184,10 @@ def Joint():
         return (flask.render_template('Joint.html'))
     
     if flask.request.method =='POST':
-        
+        ['credit_hist', 'total_bal_il',
+       'home_ownership', 'balance_annual_inc', 'sec_app_revol_util',
+       'sec_balance_annual_inc', 'term', 'sec_app_inq_last_6mths',
+       'sec_app_mort_acc', 'dti_joint', 'sec_fico_avg_score', 'sub_grade']
         #get input
         #fico score as integer
         sec_fico_avg_score = int(flask.request.form['sec_fico_avg_score'])
@@ -222,15 +208,10 @@ def Joint():
         sec_annual_inc = float(flask.request.form['sec_annual_inc'])
         #number of open accounts as integer
         sec_app_inq_last_6mths= int(flask.request.form['sec_app_inq_last_6mths'])
-        #verification status as 0, 1, 2
-        #revolving balance as float
-        revol_bal_joint = float(flask.request.form['revol_bal_joint'])
         #revolving utilization as float
         sec_app_revol_util = float(flask.request.form['sec_app_revol_util'])
         total_bal_il = float(flask.request.form['total_bal_il'])
-        #purpose as string
-        purpose = flask.request.form['purpose']
-        max_bal_bc = int(flask.request.form['max_bal_bc'])
+
         #time since first credit line in months
         er_credit_open_date = pd.to_datetime(flask.request.form['er_credit_open_date'])
       
@@ -266,20 +247,15 @@ def Joint():
         #temp['fico'] = fico
         
         temp['term']=term
-        temp['int_rate']=int_rate
-        temp['grade']=grade
         temp['sub_grade']=sub_grade
         temp['home_ownership']=home_to_int[home_ownership.upper()]
-        temp['purpose']=purp_to_int[purpose]
         temp['dti_joint']=dti_joint
-        temp['revol_bal_joint']=np.log(revol_bal_joint) 
         temp['sec_app_revol_util']=sec_app_revol_util
         temp['sec_app_mort_acc'] = sec_app_mort_acc
         temp['credit_hist']=credit_hist.days
         temp['balance_annual_inc']=balance_annual_inc
         temp['sec_balance_annual_inc']=sec_balance_annual_inc
         temp['sec_fico_avg_score'] = sec_fico_avg_score
-        temp['max_bal_bc']=np.log(max_bal_bc) 
         temp['total_bal_il']=np.log(total_bal_il)
         temp['sec_app_inq_last_6mths']=sec_app_inq_last_6mths
        
@@ -310,9 +286,9 @@ def Joint():
         elif sec_app_revol_util>=90:
             res = 'Amount of credit used up too high for secondary applicant'
         elif pred ==1:
-            res = 'Congratulations! Approved!'
+            res = 'Loan Denied!'
         else:
-            res = 'Loan Denied'
+            res = 'Congratulations! Approved!'
  
         
         
