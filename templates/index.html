@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Aria is a business focused HTML landing page template built with Bootstrap to help you create lead generation websites for companies and their services.">
     <meta name="author" content="Kunal Goyal">
 
     <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
@@ -34,7 +33,7 @@
 
 	
 	<!-- Favicon  -->
-    <link rel="icon" href="images/favicon.png">
+    <link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
 </head>
 <body data-spy="scroll" data-target=".fixed-top">
     
@@ -53,9 +52,8 @@
     <nav class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
         <!-- Text Logo - Use this if you don't have a graphic logo -->
         <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Aria</a> -->
-
         <!-- Image Logo -->
-        <a class="navbar-brand logo-image" href="index.html"><img src="{{url_for('static', filename='images/logo.svg')}}"		alt="alternative"></a>
+        <a class="navbar-brand logo-image" href="/"><img src="{{url_for('static', filename='images/logo.svg')}}"		alt="alternative"></a>
         
         <!-- Mobile Menu Toggle Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,20 +80,7 @@
                     <a class="nav-link page-scroll" href="#contact">CONTACT</a>
                 </li>
             </ul>
-            <span class="nav-item social-icons">
-                <span class="fa-stack">
-                    <a href="#your-link">
-                        <span class="hexagon"></span>
-                        <i class="fab fa-facebook-f fa-stack-1x"></i>
-                    </a>
-                </span>
-                <span class="fa-stack">
-                    <a href="#your-link">
-                        <span class="hexagon"></span>
-                        <i class="fab fa-twitter fa-stack-1x"></i>
-                    </a>
-                </span>
-            </span>
+           
         </div>
     </nav> <!-- end of navbar -->
     <!-- end of navbar -->
@@ -111,7 +96,7 @@
                             <h1>Lending Data <span id="js-rotating"> Analysis, Prediction, Visualization</span></h1>
                             <p class="p-heading p-large"></p>
                             <a class="btn-solid-lg page-scroll" href="#Predict">Predict Approval</a>    
-							<a class="btn-solid-lg page-scroll" href="#Map">Visualize Data</a>
+							<a class="btn-solid-lg page-scroll" href="#Visualize">Visualize Data</a>
 
                         </div>
                     </div> <!-- end of col -->
@@ -287,8 +272,8 @@
                                 <div class="media-body">From the sub-grade predicted we get the Interest Rate for the applicant.</div>
                             </li>
                         </ul>
+						         <p>To know more about the data analysis look at this project on <a href= "https://github.com/ikunal95/loan-default-prediction">Github</a></p>
 
-                        
                         <!-- end of counter -->
 
                     </div> <!-- end of text-container -->      
@@ -302,7 +287,7 @@
     <div id=contact class="footer">
         <div class="container">
             <div class="row">
-			<img class="card-image" src="{{url_for('static', filename='images/kunal.png')}}" alt="alternative">
+			<img class="card-image" src="{{url_for('static', filename='images/kunal.png')}}"  width="150" height="150" alt="alternative">
 
                 <div class="col-md-6">
                     <div class="text-container about">

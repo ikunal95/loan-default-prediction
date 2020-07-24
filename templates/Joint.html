@@ -31,7 +31,7 @@
 
 	
 	<!-- Favicon  -->
-    <link rel="icon" href="images/favicon.png">
+    <link rel="icon" href="{{url_for('static', filename='images/logo.svg')}}">
 </head>
 <body data-spy="scroll" data-target=".fixed-top">
     
@@ -51,7 +51,7 @@
         <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Aria</a> -->
 
         <!-- Image Logo -->
-        <a class="navbar-brand logo-image" href="index.html"><img src="{{url_for('static', filename='images/logo.svg')}}"		alt="alternative"></a>
+        <a class="navbar-brand logo-image" href="/"><img src="{{url_for('static', filename='images/logo.svg')}}"		alt="alternative"></a>
         
         <!-- Mobile Menu Toggle Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@
                     <a class="nav-link page-scroll" href="#Predict">PREDICT</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link page-scroll" href="#Visualize">VISUALIZE</a>
+                    <a class="nav-link page-scroll" href="jointreport">VISUALIZE</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href="#Insights">INSIGHTS</a>
@@ -78,20 +78,7 @@
                     <a class="nav-link page-scroll" href="#contact">CONTACT</a>
                 </li>
             </ul>
-            <span class="nav-item social-icons">
-                <span class="fa-stack">
-                    <a href="#your-link">
-                        <span class="hexagon"></span>
-                        <i class="fab fa-facebook-f fa-stack-1x"></i>
-                    </a>
-                </span>
-                <span class="fa-stack">
-                    <a href="#your-link">
-                        <span class="hexagon"></span>
-                        <i class="fab fa-twitter fa-stack-1x"></i>
-                    </a>
-                </span>
-            </span>
+            
         </div>
     </nav> <!-- end of navbar -->
     <!-- end of navbar -->
@@ -110,13 +97,13 @@
     <!-- end of header -->
 
 
-    <!-- Breadcrumbs -->
+     <!-- Breadcrumbs -->
     <div class="ex-basic-1">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumbs">
-                        <a href="index.html">Home</a><i class="fa fa-angle-double-right"></i><span>Predict Joint Loan Approval</span>
+                        <a href="/">Home</a><i class="fa fa-angle-double-right"></i><span>Predict Joint Loan Approval</span>
                     </div> <!-- end of breadcrumbs -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -126,7 +113,7 @@
 
 
     <!-- Terms Content -->
-    <div class="ex-basic-2">
+    <div id="Predict" class="ex-basic-2">
 		<h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp Please Fill in the details to get your chances of Loan Approval.</h3>
         <div class="container">
             <div class="row">
@@ -173,26 +160,7 @@
 									</datalist>
 									<div class="help-block with-errors"></div>
 								</div>
-								<div class="form-group">
-									<input name="purpose" list="purposes"  class="form-control-input" id="purpose" required>
-									<label class="label-control" for="purpose">Purpose of Loan:</label>
-									<datalist id="purposes">
-									<option value="car">
-									<option value="credit_card">
-									<option value="debt_consolidation">
-									<option value="educational">
-									<option value="home_improvement">
-									<option value="major_purchase">
-									<option value="medical">
-									<option value="moving">
-									<option value="vacation">
-									<option value="renewable_energy">
-									<option value="small_business">
-									<option value="wedding">
-									<option value="other">
-									</datalist>
-									<div class="help-block with-errors"></div>
-								</div>	
+							
 								<div class="form-group">
 									<input name="annual_inc" type="number" min="0" class="form-control-input" id="annual_inc" required>
 									<label class="label-control" for="annual_inc">Annual Income:</label>
@@ -203,11 +171,7 @@
 									<label class="label-control" for="total_bal_il">Current Balance Owed on installment accounts:</label>
 									<div class="help-block with-errors"></div>
 								</div>
-								<div class="form-group">
-									<input name="max_bal_bc" type="number" class="form-control-input" id="max_bal_bc" min="0" required>
-									<label class="label-control" for="max_bal_bc">Maximum Current Balance Owed on all accounts:</label>
-									<div class="help-block with-errors"></div>
-								</div>
+								
 								
 								
 							
@@ -243,11 +207,6 @@
 									<div class="help-block with-errors"></div>
 								</div>
 								<div class="form-group">
-									<input name="revol_bal_joint" type="number" min="0"  class="form-control-input" id="revol_bal_joint" required>
-									<label class="label-control" for="revol_bal_joint">Total credit revolving balance:</label>
-									<div class="help-block with-errors"></div>
-								</div>
-								<div class="form-group">
 									<input name="sec_app_inq_last_6mths" type="number" min="0" max="110" class="form-control-input" id="sec_app_inq_last_6mths" required>
 									<label class="label-control" for="sec_app_inq_last_6mths">Credit Inquiries in last 6 months:</label>
 									<div class="help-block with-errors"></div>
@@ -269,14 +228,137 @@
 				{% endif %}
 				</div>
 				</div>
-    </div> <!-- end of ex-basic -->
+    </div>
+	<!-- end of ex-basic -->
     <!-- end of terms content -->
     <!-- Footer -->
     <!-- Footer -->
+	
+	
+	<div id="Insights" class="tabs">
+            <div class="row">
+      
+	  <div class="area-1">
+            <div class="tabs-container">
+                
+                <!-- Tabs Links -->
+                <ul class="nav nav-tabs" id="ariaTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true"><i class="fas fa-th"></i>ROC AUC</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false"><i class="fas fa-th"></i>Precision Recall</a>
+                    </li>
+                  
+                </ul>
+                <!-- end of tabs links -->
+                
+                <!-- Tabs Content -->
+                <div class="tab-content" id="ariaTabsContent">
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="tab-1">
+                        <h4>ROC AUC Score</h4>
+                        <p>The following graph shows the ROC AUC Curve for different Machine Learning Models. XGBoost gives the best AUC.</p>
+                        
+                        <!-- Progress Bars -->
+                         <div class="col-lg-5 col-xl-6">
+                    <div class="image-container">
+                        <img class="card-image" src="{{url_for('static', filename='images/roc_curve_all_models_joint.png')}}" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+                        <!-- end of progress bars -->
+                        
+                    </div> <!-- end of tab-pane --> 
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="tab-2">
+                        <h4>Precission Recall Score </h4>
+                        <p>The following graph shows the Precision Recall Curve for different Machine Learning Models. </p>
+                        
+                       <div class="col-lg-5 col-xl-6">
+                    <div class="image-container">
+                        <img class="card-image" src="{{url_for('static', filename='images/prc_curve_all_models_joint.png')}}" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                  
+                    <!-- end of tab -->
+
+                </div> <!-- end of tab-content -->
+                <!-- end of tabs content -->
+
+            </div> <!-- end of tabs-container -->
+        </div>
+		<div class="area-2">
+		
+
+            <div class="tabs-container">
+                
+                <!-- Tabs Links -->
+                <ul class="nav nav-tabs" id="ariaTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="nav-tab-1" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="true"><i class="fas fa-th"></i>Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#tab-4" role="tab" aria-controls="tab-4" aria-selected="false"><i class="fas fa-th"></i>Confidence Interval</a>
+                    </li>
+                  
+                </ul>
+                <!-- end of tabs links -->
+                
+                <!-- Tabs Content -->
+                <div class="tab-content" id="ariaTabsContent">
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade show active" id="tab-3" role="tabpanel" aria-labelledby="tab-3">
+                        <h4>GB Tree Feature Weights</h4>
+                        <p>The following graph gives the feature importance to predict the Loan Defaults.</p>
+                        
+                        <!-- Progress Bars -->
+                         <div class="col-lg-5 col-xl-6">
+                    <div class="image-container">
+                        <img class="card-image" src="{{url_for('static', filename='images/Joint_features_weight.png')}}" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+                        <!-- end of progress bars -->
+                        
+                    </div> <!-- end of tab-pane --> 
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                    <div class="tab-pane fade" id="tab-4" role="tabpanel" aria-labelledby="tab-4">
+                        <h4>GBTree Confidence Interval</h4>
+                        <p>Testing the model on random subset of the lending data, AUC score everytime was around 0.71.</p>
+                        
+                       <div class="col-lg-5 col-xl-6">
+                    <div class="image-container">
+                        <img class="card-image" src="{{url_for('static', filename='images/threshold_joint.png')}}" alt="alternative">
+                    </div> <!-- end of image-container -->
+                </div> <!-- end of col -->
+                    </div> <!-- end of tab-pane -->
+                    <!-- end of tab -->
+
+                    <!-- Tab -->
+                  
+
+                </div> <!-- end of tab-content -->
+                <!-- end of tabs content -->
+
+            </div> <!-- end of tabs-container -->
+        </div>
+		</div>
+    </div> <!-- end of tabs -->
+    <!-- end of details 2 -->
+
     <div id=contact class="footer">
         <div class="container">
             <div class="row">
-			<img class="card-image" src="{{url_for('static', filename='images/kunal.png')}}" alt="alternative">
+			<img class="card-image" src="{{url_for('static', filename='images/kunal.png')}}"  width="150" height="150" alt="alternative">
 
                 <div class="col-md-6">
                     <div class="text-container about">
